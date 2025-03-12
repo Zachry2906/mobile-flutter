@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as Math;
 
 void main() {
   runApp(MyApp());
@@ -24,8 +25,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    TrapesiumPage(),
-    KubusPage(),
+    JajarGenjangPage(),
+    LimasPage(),
     HariPage(),
     DataDiriPage(),
   ];
@@ -44,9 +45,9 @@ class _MainPageState extends State<MainPage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.change_history),
-            label: "Trapesium",
+            label: "Jajar Genjang",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.check_box), label: "Kubus"),
+          BottomNavigationBarItem(icon: Icon(Icons.check_box), label: "Limas"),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
             label: "Hari",
@@ -63,60 +64,60 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// Halaman Trapesium
-class TrapesiumPage extends StatefulWidget {
+// Halaman Jajar Genjang (Formerly Trapesium)
+class JajarGenjangPage extends StatefulWidget {
   @override
-  _TrapesiumPageState createState() => _TrapesiumPageState();
+  _JajarGenjangPageState createState() => _JajarGenjangPageState();
 }
 
-class _TrapesiumPageState extends State<TrapesiumPage> {
-  final TextEditingController a = TextEditingController();
-  final TextEditingController b = TextEditingController();
-  final TextEditingController h = TextEditingController();
+class _JajarGenjangPageState extends State<JajarGenjangPage> {
+  final TextEditingController alas = TextEditingController();
+  final TextEditingController tinggi = TextEditingController();
+  final TextEditingController sisiMiring = TextEditingController();
   double luas = 0, keliling = 0;
 
   void hitung() {
-    double sisiA = double.tryParse(a.text) ?? 0;
-    double sisiB = double.tryParse(b.text) ?? 0;
-    double tinggi = double.tryParse(h.text) ?? 0;
+    double a = double.tryParse(alas.text) ?? 0;
+    double t = double.tryParse(tinggi.text) ?? 0;
+    double b = double.tryParse(sisiMiring.text) ?? 0;
     setState(() {
-      luas = 0.5 * (sisiA + sisiB) * tinggi;
-      keliling = sisiA + sisiB + (2 * tinggi);
+      luas = a * t;
+      keliling = 2 * (a + b);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hitung Trapesium")),
+      appBar: AppBar(title: Text("Hitung Jajar Genjang")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: a,
+              controller: alas,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: "Sisi Atas",
+                labelText: "Alas",
                 border: OutlineInputBorder(),
               ),
             ),
             SizedBox(height: 10),
             TextField(
-              controller: b,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Sisi Bawah",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              controller: h,
+              controller: tinggi,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: "Tinggi",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: sisiMiring,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Sisi Miring",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -132,39 +133,53 @@ class _TrapesiumPageState extends State<TrapesiumPage> {
   }
 }
 
-// Halaman Kubus
-class KubusPage extends StatefulWidget {
+// Halaman Limas (Formerly Kubus)
+class LimasPage extends StatefulWidget {
   @override
-  _KubusPageState createState() => _KubusPageState();
+  _LimasPageState createState() => _LimasPageState();
 }
 
-class _KubusPageState extends State<KubusPage> {
-  final TextEditingController sisi = TextEditingController();
+class _LimasPageState extends State<LimasPage> {
+  final TextEditingController alas = TextEditingController();
+  final TextEditingController tinggi = TextEditingController();
   double volume = 0, luasPermukaan = 0;
 
   void hitung() {
-    double s = double.tryParse(sisi.text) ?? 0;
+    double a = double.tryParse(alas.text) ?? 0;
+    double t = double.tryParse(tinggi.text) ?? 0;
+
     setState(() {
-      volume = s * s * s;
-      luasPermukaan =
-          6 * s * s; // Perbaikan: keliling seharusnya luas permukaan
+      volume = (1 / 3) * (a * a) * t;
+      double luasAlas = a * a;
+      double tinggiSegitiga = Math.sqrt(Math.pow(t, 2) + Math.pow(a / 2, 2));
+      double luasSegitiga = (1 / 2) * a * tinggiSegitiga;
+      luasPermukaan = luasAlas + (4 * luasSegitiga);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Hitung Kubus")),
+      appBar: AppBar(title: Text("Hitung Limas")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
-              controller: sisi,
+              controller: alas,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: "Sisi",
+                labelText: "Panjang Sisi Alas",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: tinggi,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Tinggi Limas",
                 border: OutlineInputBorder(),
               ),
             ),
